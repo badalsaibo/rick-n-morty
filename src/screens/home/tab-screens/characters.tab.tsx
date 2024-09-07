@@ -1,6 +1,8 @@
 import useAllCharacters from "@/api/hooks/useAllCharacters";
-import { FlatList, View, Image } from "react-native";
-import { Surface, Text } from "react-native-paper";
+import LoadingFooter from "@/components/flatlist-footer/loading-footer.component";
+import { useCallback } from "react";
+import { FlatList, View, Image, Pressable } from "react-native";
+import { Surface, Text, TouchableRipple } from "react-native-paper";
 
 type Character = {
     id: number;
@@ -24,28 +26,41 @@ type Character = {
 };
 
 
-const renderItem = ({ item }: { item: Character }) => (
-    <Surface style={{ padding: 10, alignItems: 'center', borderRadius: 8, width: '48%' }} elevation={4}>
-        <Image
-            source={{ uri: item.image }}
-            style={{ width: 50, height: 50, borderRadius: 25 }}
-        />
-        <Text style={{ marginLeft: 10 }}>{item.name}</Text>
-    </Surface>
-);
+const renderItem = ({ item }: { item: Character }) => {
 
-const CharacterTabScreen = () => {
-
-    const { data, isLoading } = useAllCharacters();
-
-
-    console.log(data);
-    if (isLoading) {
-        return <Text>Loading</Text>
+    const handlePress = () => {
+        console.log('hello', item.id)
     }
 
     return (
+        <Pressable style={{ padding: 10, alignItems: 'center', borderRadius: 8, width: '48%', backgroundColor: 'gray' }} onPress={handlePress}>
+            <Image
+                source={{ uri: item.image }}
+                style={{ width: 50, height: 50, borderRadius: 25 }}
+            />
+            <Text style={{ marginLeft: 10 }}>{item.name}</Text>
+        </Pressable>)
+};
+
+const CharacterTabScreen = () => {
+
+    const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, } = useAllCharacters();
+
+
+    const handleNextPage = () => {
+        if (hasNextPage) {
+            fetchNextPage();
+        }
+    }
+
+    const renderFooter = useCallback(
+        () => <LoadingFooter loading={isFetchingNextPage} />,
+        [isFetchingNextPage],
+    );
+
+    return (
         <View style={{ flex: 1, backgroundColor: 'powderblue' }}>
+            {isLoading && <Text>Loading...</Text>}
             {!isLoading && data && data.pages.length && (
                 <FlatList
                     contentContainerStyle={{ padding: 14, gap: 10 }}
@@ -53,6 +68,8 @@ const CharacterTabScreen = () => {
                     data={data.pages.flatMap(page => page.results)}
                     renderItem={renderItem}
                     numColumns={2}
+                    ListFooterComponent={renderFooter}
+                    onEndReached={handleNextPage}
                 />
             )}
 
