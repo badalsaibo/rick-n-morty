@@ -4,6 +4,10 @@ import BootSplash from "react-native-bootsplash";
 import { useEffect } from 'react';
 import NavigatorRoot from '@/navigators/navigator.root';
 import { PaperProvider } from 'react-native-paper';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient()
+
 
 const App = () => {
 
@@ -14,10 +18,13 @@ const App = () => {
 
 
   return (
+
     <PaperProvider>
-      <NavigationContainer>
-        <NavigatorRoot />
-      </NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <NavigatorRoot />
+        </NavigationContainer>
+      </QueryClientProvider>
     </PaperProvider>
 
   );
