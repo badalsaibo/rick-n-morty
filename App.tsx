@@ -1,9 +1,9 @@
-import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 import BootSplash from "react-native-bootsplash";
 import { useEffect } from 'react';
 import NavigatorRoot from '@/navigators/navigator.root';
+import { PaperProvider } from 'react-native-paper';
 
 const App = () => {
 
@@ -14,9 +14,12 @@ const App = () => {
 
 
   return (
-    <NavigationContainer>
-      <NavigatorRoot />
-    </NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        <NavigatorRoot />
+      </NavigationContainer>
+    </PaperProvider>
+
   );
 };
 
