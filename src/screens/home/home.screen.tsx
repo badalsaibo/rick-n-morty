@@ -25,6 +25,7 @@ const HomeScreen = () => {
         >
             {DEFAULT_TABS.map(({ name, iconSource, tabBarLabel, component }) => (
                 <Tab.Screen
+                    key={name}
                     name={name as keyof TabRootParamList}
                     component={component}
                     options={{

@@ -36,7 +36,6 @@ const CustomTabBar = ({ navigation, state, descriptors, insets }: CustomTabBarPr
             return null;
         }}
         getLabelText={({ route }) => {
-            console.log(route, '==')
             const { options } = descriptors[route.key];
             const label =
                 options.tabBarLabel !== undefined
