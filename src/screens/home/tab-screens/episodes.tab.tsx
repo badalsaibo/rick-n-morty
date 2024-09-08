@@ -16,7 +16,7 @@ const LocationItem = ({ episode }: { episode: Episode }) => {
 
   return (
     <List.Accordion title={`${episode.episode} ${episode.name}`} left={leftIcon}>
-      <List.Item title={episode.air_date} />
+      <List.Item title={`Aired on - ${episode.air_date}`} />
     </List.Accordion>
   );
 };
