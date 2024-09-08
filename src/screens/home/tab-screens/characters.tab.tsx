@@ -18,7 +18,6 @@ const CharacterItem = ({ character }: { character: Character }) => {
 
   const handlePress = () => {
     navigation.navigate('CharacterDetailScreen', { id: character.id });
-    console.log(character.id);
   };
 
   return (
@@ -86,8 +85,6 @@ const CharacterTabScreen = () => {
       };
     });
   };
-
-  console.log(selectedFilters);
 
   return (
     <Surface style={{ flex: 1 }}>

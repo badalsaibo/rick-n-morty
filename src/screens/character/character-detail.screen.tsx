@@ -23,8 +23,6 @@ const CharacterDetailScreen = ({
 
   const { data, isLoading } = useCharacter(id);
 
-  console.log(id);
-
   return (
     <View style={{ flex: 1 }}>
       <Appbar.Header>
