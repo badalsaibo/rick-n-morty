@@ -1,11 +1,12 @@
 import useEpisodes from '@/api/hooks/useEpisodes';
 import LoadingFooter from '@/components/flatlist-footer/loading-footer.component';
 import StaticFooter from '@/components/flatlist-footer/static-footer.component';
+import Loader from '@/components/loader/loader.component';
 import { STYLES } from '@/constants/style.constant';
 import { Episode } from '@/types/episode.type';
 import { useCallback } from 'react';
 import { FlatList } from 'react-native';
-import { ActivityIndicator, List, Surface } from 'react-native-paper';
+import { List, Surface } from 'react-native-paper';
 import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
 
 const LocationItem = ({ episode }: { episode: Episode }) => {
@@ -44,7 +45,7 @@ const EpisodesTabScreen = () => {
 
   return (
     <Surface style={{ flex: 1 }}>
-      {isLoading && <ActivityIndicator />}
+      {isLoading && <Loader />}
       {!isLoading && data && data.pages.length && (
         <FlatList
           contentContainerStyle={{ padding: STYLES.GUTTER, gap: 10 }}

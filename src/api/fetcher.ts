@@ -1,11 +1,17 @@
 import apiClient from './axios-instance';
 import axios from 'axios';
 
-type PaginatedFetch = { url: string; page: number; name?: string };
+export type FilterSearchParams = {
+  name?: string;
+  gender?: string;
+  status?: string;
+};
 
-export const paginatedFetch = async <T>({ url, page = 1, name }: PaginatedFetch) => {
+type PaginatedFetch = { url: string; page: number } & FilterSearchParams;
+
+export const paginatedFetch = async <T>({ url, page = 1, name, gender, status }: PaginatedFetch) => {
   try {
-    const { data } = await apiClient.get<T>(url, { params: { page, name } });
+    const { data } = await apiClient.get<T>(url, { params: { page, name, gender, status } });
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -1,26 +1,20 @@
-import useAllCharacters from '@/api/hooks/useAllCharacters';
 import useLocations from '@/api/hooks/useLocations';
 import LoadingFooter from '@/components/flatlist-footer/loading-footer.component';
+import Loader from '@/components/loader/loader.component';
 import { STYLES } from '@/constants/style.constant';
 import { Location } from '@/types/location.type';
-import { NavigationStackParamList } from '@/types/navigation/navigation-stacks.type';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCallback, useState } from 'react';
-import { FlatList, View, Image, Pressable } from 'react-native';
-import { ActivityIndicator, List, Surface, Text } from 'react-native-paper';
+import { useCallback } from 'react';
+import { FlatList } from 'react-native';
+import { List, Surface } from 'react-native-paper';
+import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
 
 const LocationItem = ({ location }: { location: Location }) => {
-  const [expanded, setExpanded] = useState(true);
-
-  const navigation = useNavigation<NativeStackNavigationProp<NavigationStackParamList>>();
-
-  const handlePress = () => {
-    setExpanded(!expanded);
-  };
+  const leftIcon = useCallback((props: { color: string; style: Style }) => {
+    return <List.Icon {...props} icon="earth" />;
+  }, []);
 
   return (
-    <List.Accordion title={location.name} left={props => <List.Icon {...props} icon="earth" />}>
+    <List.Accordion title={location.name} left={leftIcon}>
       <List.Item title={location.type} />
     </List.Accordion>
   );
@@ -41,7 +35,7 @@ const LocationsTabScreen = () => {
 
   return (
     <Surface style={{ flex: 1 }}>
-      {isLoading && <ActivityIndicator />}
+      {isLoading && <Loader />}
       {!isLoading && data && data.pages.length && (
         <FlatList
           contentContainerStyle={{ padding: STYLES.GUTTER, gap: 10 }}

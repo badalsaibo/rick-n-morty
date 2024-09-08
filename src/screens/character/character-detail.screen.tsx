@@ -1,5 +1,6 @@
 import { useCharacter } from '@/api/hooks/useCharacter';
 import EpisodeDetails from '@/components/episode-details/episode-details.component';
+import Loader from '@/components/loader/loader.component';
 import LocationDetails from '@/components/location-details/location-details.component';
 import Status from '@/components/status/status.component';
 import { STYLES } from '@/constants/style.constant';
@@ -8,7 +9,7 @@ import { NavigationStackParamList } from '@/types/navigation/navigation-stacks.t
 import { getIdFromUrl } from '@/utils/helper.util';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, View } from 'react-native';
-import { ActivityIndicator, Appbar, Card, Surface, Text } from 'react-native-paper';
+import { Appbar, Card, Surface, Text } from 'react-native-paper';
 
 const CharacterDetailScreen = ({
   route,
@@ -31,7 +32,7 @@ const CharacterDetailScreen = ({
       </Appbar.Header>
 
       <Surface style={{ flex: 1 }}>
-        {isLoading && <ActivityIndicator />}
+        {isLoading && <Loader />}
         {!isLoading && data && (
           <ScrollView>
             <Card.Cover style={{ borderRadius: 0, height: 300 }} source={{ uri: data.image }} />

@@ -3,4 +3,5 @@ export type NavigationStackParamList = {
   CharacterDetailScreen: {
     id: number;
   };
+  FiltersScreen: undefined;
 };

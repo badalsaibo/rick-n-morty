@@ -1,14 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { paginatedFetch } from '../fetcher';
+import { FilterSearchParams, paginatedFetch } from '../fetcher';
 import API_ENDPOINTS from '../api-endpoints.constant';
 import { Characters } from '@/types/character.type';
 
-export const useAllCharacters = ({ name = '' }: { name?: string }) => {
-  console.log('b===', name);
+export const useAllCharacters = ({ name = '', status = '', gender = '' }: FilterSearchParams) => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: ['characters', name],
+    queryKey: ['characters', name, status, gender],
     queryFn: ({ pageParam }) =>
-      paginatedFetch<Characters>({ url: API_ENDPOINTS.public.get.characters, page: pageParam, name }),
+      paginatedFetch<Characters>({ url: API_ENDPOINTS.public.get.characters, page: pageParam, name, status, gender }),
     initialPageParam: 1,
     getNextPageParam: lastPage => {
       return lastPage.info.next ? Number(new URL(lastPage.info.next).searchParams.get('page')) : undefined;
