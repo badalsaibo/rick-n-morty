@@ -1,9 +1,9 @@
 import apiClient from './axios-instance';
 import axios from 'axios';
 
-export const paginatedFetch = async (url: string, page = 1) => {
+export const paginatedFetch = async <T>(url: string, page = 1) => {
   try {
-    const { data } = await apiClient.get(`${url}?page=${page}`);
+    const { data } = await apiClient.get<T>(`${url}?page=${page}`);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -16,9 +16,9 @@ export const paginatedFetch = async (url: string, page = 1) => {
   }
 };
 
-export const fetcher = async (url: string) => {
+export const fetcher = async <T>(url: string) => {
   try {
-    const { data } = await apiClient.get(url);
+    const { data } = await apiClient.get<T>(url);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

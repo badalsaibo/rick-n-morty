@@ -1,10 +1,7 @@
 import useAllCharacters from '@/api/hooks/useAllCharacters';
-import useEpisodes from '@/api/hooks/useEpisodes';
 import useLocations from '@/api/hooks/useLocations';
 import LoadingFooter from '@/components/flatlist-footer/loading-footer.component';
-import StaticFooter from '@/components/flatlist-footer/static-footer.component';
 import { Character } from '@/types/character.type';
-import { Episode } from '@/types/episode.type';
 import { Location } from '@/types/location.type';
 import { NavigationStackParamList } from '@/types/navigation/navigation-stacks.type';
 import { useNavigation } from '@react-navigation/native';
@@ -13,27 +10,35 @@ import { useCallback, useState } from 'react';
 import { FlatList, View, Image, Pressable } from 'react-native';
 import { ActivityIndicator, List, Surface, Text } from 'react-native-paper';
 
-const LocationItem = ({ episode }: { episode: Episode }) => {
+const LocationItem = ({ location }: { location: Location }) => {
   const [expanded, setExpanded] = useState(true);
 
+  const navigation = useNavigation<NativeStackNavigationProp<NavigationStackParamList>>();
+
   const handlePress = () => {
+    // navigation.navigate('CharacterDetailScreen', { id: location.id });
     setExpanded(!expanded);
   };
 
   return (
-    <List.Accordion
-      title={`${episode.episode} ${episode.name}`}
-      left={props => <List.Icon {...props} icon="movie-open" />}>
-      <List.Item title={episode.air_date} />
+    // <Pressable>
+    //   <Surface style={{ padding: 10, borderRadius: 8, flex: 1 }}>
+    //     <Text variant="titleMedium">{location.name}</Text>
+    //     <Text>{location.type}</Text>
+    //   </Surface>
+    // </Pressable>
+    <List.Accordion title={location.name} left={props => <List.Icon {...props} icon="earth" />}>
+      <List.Item title={location.type} />
+      <List.Item title="Second item" />
     </List.Accordion>
   );
 };
 
-const EpisodesTabScreen = () => {
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useEpisodes();
+const LocationsTabScreen = () => {
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useLocations();
 
   const renderItem = useCallback(
-    ({ item }: { item: Episode }) => <LocationItem episode={item} />,
+    ({ item }: { item: Location }) => <LocationItem location={item} />,
     [],
   );
 
@@ -43,12 +48,10 @@ const EpisodesTabScreen = () => {
     }
   };
 
-  const renderFooter = useCallback(() => {
-    if (hasNextPage) {
-      return <LoadingFooter loading={isFetchingNextPage} />;
-    }
-    return <StaticFooter />;
-  }, [isFetchingNextPage]);
+  const renderFooter = useCallback(
+    () => <LoadingFooter loading={isFetchingNextPage} />,
+    [isFetchingNextPage],
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -66,4 +69,4 @@ const EpisodesTabScreen = () => {
   );
 };
 
-export default EpisodesTabScreen;
+export default LocationsTabScreen;
