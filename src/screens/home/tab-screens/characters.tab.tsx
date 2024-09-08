@@ -8,7 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCallback, useState } from 'react';
 import { FlatList, View, Image, Pressable } from 'react-native';
-import { ActivityIndicator, IconButton, Searchbar, Surface, Text } from 'react-native-paper';
+import { ActivityIndicator, Button, IconButton, Searchbar, Surface, Text } from 'react-native-paper';
+import NothingFoundImage from '@/assets/img/not-found.png';
 
 const CharacterItem = ({ character }: { character: Character }) => {
   const navigation = useNavigation<NativeStackNavigationProp<NavigationStackParamList>>();
@@ -30,12 +31,15 @@ const CharacterItem = ({ character }: { character: Character }) => {
 
 const CharacterTabScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [reactSearchQuery, setReactSearchQuery] = useState('');
   const [isFiltersVisible, setFiltersVisible] = useState(false);
 
   const showFiltersModal = () => setFiltersVisible(true);
   const hideFilterModal = () => setFiltersVisible(false);
 
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useAllCharacters();
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useAllCharacters({
+    name: reactSearchQuery,
+  });
 
   const renderItem = useCallback(({ item }: { item: Character }) => <CharacterItem character={item} />, []);
 
@@ -45,20 +49,47 @@ const CharacterTabScreen = () => {
     }
   };
 
+  const handleNameSearch = () => {
+    setReactSearchQuery(searchQuery);
+  };
+
   const renderFooter = useCallback(() => <LoadingFooter loading={isFetchingNextPage} />, [isFetchingNextPage]);
+
+  const handleResetSearch = () => {
+    setSearchQuery('');
+    setReactSearchQuery('');
+  };
 
   return (
     <Surface style={{ flex: 1 }}>
       <View style={{ padding: STYLES.GUTTER, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1 }}>
-          <Searchbar placeholder="Search" onChangeText={setSearchQuery} value={searchQuery} />
+          <Searchbar
+            placeholder="Search"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+            onIconPress={handleNameSearch}
+            onSubmitEditing={handleNameSearch}
+            onClearIconPress={handleResetSearch}
+          />
         </View>
         <View>
           <IconButton hitSlop={10} icon="filter" size={28} onPress={showFiltersModal} />
         </View>
       </View>
       {isLoading && <ActivityIndicator />}
-      {!isLoading && data && data.pages.length && (
+      {!isLoading && data && data.pages.flatMap(page => page.results).length === 0 && (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', gap: STYLES.GUTTER }}>
+          <Image style={{ width: 200, height: 200, borderRadius: 25 }} source={NothingFoundImage} />
+          <Text variant="bodyLarge">
+            We found no data related to <Text style={{ fontWeight: 'bold' }}>{reactSearchQuery}</Text>
+          </Text>
+          <Button mode="contained-tonal" onPress={handleResetSearch}>
+            Go back
+          </Button>
+        </View>
+      )}
+      {!isLoading && data && data.pages.length && data.pages.flatMap(page => page.results).length !== 0 && (
         <FlatList
           contentContainerStyle={{ padding: STYLES.GUTTER, gap: 10 }}
           columnWrapperStyle={{ justifyContent: 'space-between' }}

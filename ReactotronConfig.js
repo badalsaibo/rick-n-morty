@@ -6,4 +6,5 @@ Reactotron.configure() // controls connection & communication settings
       ignoreUrls: /\/(logs|symbolicate)$/,
     }),
   )
+  .useReactNative()
   .connect(); // let's connect!

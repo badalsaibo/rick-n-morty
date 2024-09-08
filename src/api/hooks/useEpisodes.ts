@@ -6,7 +6,7 @@ import { Episodes } from '@/types/episode.type';
 export const useEpisodes = () => {
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['episodes'],
-    queryFn: ({ pageParam }) => paginatedFetch<Episodes>(API_ENDPOINTS.public.get.episodes, pageParam),
+    queryFn: ({ pageParam }) => paginatedFetch<Episodes>({ url: API_ENDPOINTS.public.get.episodes, page: pageParam }),
     initialPageParam: 1,
     getNextPageParam: lastPage => {
       return lastPage.info.next ? Number(new URL(lastPage.info.next).searchParams.get('page')) : undefined;
