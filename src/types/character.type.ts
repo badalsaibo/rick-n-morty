@@ -1,3 +1,5 @@
+import { Info } from './common.type';
+
 export type Character = {
   id: number;
   name: string;
@@ -17,4 +19,9 @@ export type Character = {
   episode: string[];
   url: string;
   created: string;
+};
+
+export type Characters = {
+  info: Info;
+  results: Character[];
 };

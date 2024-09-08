@@ -3,6 +3,7 @@ import useEpisodes from '@/api/hooks/useEpisodes';
 import useLocations from '@/api/hooks/useLocations';
 import LoadingFooter from '@/components/flatlist-footer/loading-footer.component';
 import StaticFooter from '@/components/flatlist-footer/static-footer.component';
+import { STYLES } from '@/constants/style.constant';
 import { Character } from '@/types/character.type';
 import { Episode } from '@/types/episode.type';
 import { Location } from '@/types/location.type';
@@ -32,10 +33,7 @@ const LocationItem = ({ episode }: { episode: Episode }) => {
 const EpisodesTabScreen = () => {
   const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useEpisodes();
 
-  const renderItem = useCallback(
-    ({ item }: { item: Episode }) => <LocationItem episode={item} />,
-    [],
-  );
+  const renderItem = useCallback(({ item }: { item: Episode }) => <LocationItem episode={item} />, []);
 
   const handleNextPage = () => {
     if (hasNextPage) {
@@ -47,22 +45,25 @@ const EpisodesTabScreen = () => {
     if (hasNextPage) {
       return <LoadingFooter loading={isFetchingNextPage} />;
     }
-    return <StaticFooter />;
+
+    if (!hasNextPage) {
+      return <StaticFooter />;
+    }
   }, [isFetchingNextPage]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <Surface style={{ flex: 1 }}>
       {isLoading && <ActivityIndicator />}
       {!isLoading && data && data.pages.length && (
         <FlatList
-          contentContainerStyle={{ padding: 14, gap: 10 }}
+          contentContainerStyle={{ padding: STYLES.GUTTER, gap: 10 }}
           data={data.pages.flatMap(page => page.results)}
           renderItem={renderItem}
           ListFooterComponent={renderFooter}
           onEndReached={handleNextPage}
         />
       )}
-    </View>
+    </Surface>
   );
 };
 
