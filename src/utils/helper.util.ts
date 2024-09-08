@@ -3,5 +3,6 @@ export const getIdFromUrl = (url: string) => {
   if (id) {
     return Number(id);
   }
-  return 1;
+
+  return 0;
 };

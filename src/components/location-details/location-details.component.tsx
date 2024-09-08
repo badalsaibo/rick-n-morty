@@ -1,5 +1,4 @@
 import useLocation from '@/api/hooks/useLocation';
-import { getIdFromUrl } from '@/utils/helper.util';
 import { View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 

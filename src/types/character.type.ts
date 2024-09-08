@@ -1,9 +1,11 @@
 import { Info } from './common.type';
 
+export type StatusType = 'alive' | 'dead' | 'unknown';
+
 export type Character = {
   id: number;
   name: string;
-  status: string;
+  status: StatusType;
   species: string;
   type: string;
   gender: string;

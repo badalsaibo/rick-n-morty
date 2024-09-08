@@ -1,12 +1,14 @@
 import { useCharacter } from '@/api/hooks/useCharacter';
 import EpisodeDetails from '@/components/episode-details/episode-details.component';
 import LocationDetails from '@/components/location-details/location-details.component';
+import Status from '@/components/status/status.component';
 import { STYLES } from '@/constants/style.constant';
+import { StatusType } from '@/types/character.type';
 import { NavigationStackParamList } from '@/types/navigation/navigation-stacks.type';
 import { getIdFromUrl } from '@/utils/helper.util';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, View } from 'react-native';
-import { ActivityIndicator, Appbar, Card, MD2Colors, MD3Colors, Surface, Text } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Card, Surface, Text } from 'react-native-paper';
 
 const CharacterDetailScreen = ({
   route,
@@ -38,14 +40,7 @@ const CharacterDetailScreen = ({
                 {data.name}
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                <View
-                  style={{
-                    width: 12,
-                    height: 12,
-                    borderRadius: 100,
-                    backgroundColor: MD2Colors.green500,
-                    overflow: 'hidden',
-                  }}></View>
+                <Status status={data.status.toLowerCase() as StatusType} />
                 <Text variant="bodyLarge">
                   {data.status} - {data.species}
                 </Text>
@@ -62,15 +57,18 @@ const CharacterDetailScreen = ({
                 <Text>Origin</Text>
                 <Text variant="bodyLarge">{data.origin.name}</Text>
               </View>
-              <View>
-                <LocationDetails locationId={getIdFromUrl(data.location.url)} />
-              </View>
-              <View>
+              {data.location.url && (
+                <View>
+                  <LocationDetails locationId={getIdFromUrl(data.location.url)} />
+                </View>
+              )}
+
+              {data.episode.length && (
                 <View>
                   <Text>First seen in</Text>
                   <EpisodeDetails episodeId={getIdFromUrl(data.episode[0])} />
                 </View>
-              </View>
+              )}
             </View>
           </ScrollView>
         )}

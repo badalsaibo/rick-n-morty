@@ -1,7 +1,6 @@
-import { View } from 'react-native';
 import { Modal, Portal, Surface, Text } from 'react-native-paper';
 
-const FILTERS = [
+export const FILTERS = [
   {
     name: 'status',
     values: ['alive', 'dead', 'unknown'],

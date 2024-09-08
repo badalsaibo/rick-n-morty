@@ -1,30 +1,21 @@
-import useAllCharacters from '@/api/hooks/useAllCharacters';
 import useEpisodes from '@/api/hooks/useEpisodes';
-import useLocations from '@/api/hooks/useLocations';
 import LoadingFooter from '@/components/flatlist-footer/loading-footer.component';
 import StaticFooter from '@/components/flatlist-footer/static-footer.component';
 import { STYLES } from '@/constants/style.constant';
-import { Character } from '@/types/character.type';
 import { Episode } from '@/types/episode.type';
-import { Location } from '@/types/location.type';
-import { NavigationStackParamList } from '@/types/navigation/navigation-stacks.type';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useCallback, useState } from 'react';
-import { FlatList, View, Image, Pressable } from 'react-native';
-import { ActivityIndicator, List, Surface, Text } from 'react-native-paper';
+import { useCallback } from 'react';
+import { FlatList } from 'react-native';
+import { ActivityIndicator, List, Surface } from 'react-native-paper';
+import { Style } from 'react-native-paper/lib/typescript/components/List/utils';
 
 const LocationItem = ({ episode }: { episode: Episode }) => {
-  const [expanded, setExpanded] = useState(true);
-
-  const handlePress = () => {
-    setExpanded(!expanded);
-  };
+  const leftIcon = useCallback(
+    (props: { color: string; style: Style }) => <List.Icon {...props} icon="movie-open" />,
+    [],
+  );
 
   return (
-    <List.Accordion
-      title={`${episode.episode} ${episode.name}`}
-      left={props => <List.Icon {...props} icon="movie-open" />}>
+    <List.Accordion title={`${episode.episode} ${episode.name}`} left={leftIcon}>
       <List.Item title={episode.air_date} />
     </List.Accordion>
   );
@@ -49,7 +40,7 @@ const EpisodesTabScreen = () => {
     if (!hasNextPage) {
       return <StaticFooter />;
     }
-  }, [isFetchingNextPage]);
+  }, [isFetchingNextPage, hasNextPage]);
 
   return (
     <Surface style={{ flex: 1 }}>

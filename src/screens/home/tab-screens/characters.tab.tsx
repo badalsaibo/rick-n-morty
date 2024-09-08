@@ -15,13 +15,14 @@ const CharacterItem = ({ character }: { character: Character }) => {
 
   const handlePress = () => {
     navigation.navigate('CharacterDetailScreen', { id: character.id });
+    console.log(character.id);
   };
 
   return (
     <Pressable style={{ width: '48%', height: '100%' }} onPress={handlePress}>
-      <Surface style={{ padding: 10, alignItems: 'center', borderRadius: 8, flex: 1 }} elevation={5}>
+      <Surface style={{ padding: 10, alignItems: 'center', borderRadius: 8, flex: 1, gap: 4 }} elevation={5}>
         <Image source={{ uri: character.image }} style={{ width: 50, height: 50, borderRadius: 25 }} />
-        <Text style={{ marginLeft: 10 }}>{character.name}</Text>
+        <Text style={{ textAlign: 'center' }}>{character.name}</Text>
       </Surface>
     </Pressable>
   );
