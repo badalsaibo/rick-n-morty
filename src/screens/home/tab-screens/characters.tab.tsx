@@ -1,50 +1,43 @@
 import useAllCharacters from "@/api/hooks/useAllCharacters";
 import LoadingFooter from "@/components/flatlist-footer/loading-footer.component";
+import { Character } from "@/types/character.type";
+import { NavigationStackParamList } from "@/types/navigation/navigation-stacks.type";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useCallback } from "react";
 import { FlatList, View, Image, Pressable } from "react-native";
-import { Surface, Text, TouchableRipple } from "react-native-paper";
-
-type Character = {
-    id: number;
-    name: string;
-    status: string;
-    species: string;
-    type: string;
-    gender: string;
-    origin: {
-        name: string;
-        url: string;
-    };
-    location: {
-        name: string;
-        url: string;
-    };
-    image: string;
-    episode: string[];
-    url: string;
-    created: string;
-};
+import { Surface, Text } from "react-native-paper";
 
 
-const renderItem = ({ item }: { item: Character }) => {
+const CharacterItem = ({ character }: { character: Character }) => {
+
+    const navigation = useNavigation<NativeStackNavigationProp<NavigationStackParamList>>();
 
     const handlePress = () => {
-        console.log('hello', item.id)
+        navigation.navigate('CharacterDetailScreen', { id: character.id });
     }
 
     return (
-        <Pressable style={{ padding: 10, alignItems: 'center', borderRadius: 8, width: '48%', backgroundColor: 'gray' }} onPress={handlePress}>
-            <Image
-                source={{ uri: item.image }}
-                style={{ width: 50, height: 50, borderRadius: 25 }}
-            />
-            <Text style={{ marginLeft: 10 }}>{item.name}</Text>
+        <Pressable style={{ width: '48%', }} onPress={handlePress}>
+            <Surface style={{ padding: 10, alignItems: 'center', borderRadius: 8, }}>
+                <Image
+                    source={{ uri: character.image }}
+                    style={{ width: 50, height: 50, borderRadius: 25 }}
+                />
+                <Text style={{ marginLeft: 10 }}>{character.name}</Text>
+            </Surface>
         </Pressable>)
 };
 
 const CharacterTabScreen = () => {
 
     const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage, } = useAllCharacters();
+
+    const renderItem = useCallback(
+        ({ item }: { item: Character }) => (
+            <CharacterItem character={item} />
+        )
+        , []);
 
 
     const handleNextPage = () => {
@@ -58,8 +51,10 @@ const CharacterTabScreen = () => {
         [isFetchingNextPage],
     );
 
+
+
     return (
-        <View style={{ flex: 1, backgroundColor: 'powderblue' }}>
+        <View style={{ flex: 1 }}>
             {isLoading && <Text>Loading...</Text>}
             {!isLoading && data && data.pages.length && (
                 <FlatList

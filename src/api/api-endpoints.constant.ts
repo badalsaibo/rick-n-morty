@@ -4,9 +4,9 @@ const API_ENDPOINTS = {
       characters: '/character',
       locations: '/locations',
       episodes: '/episodes',
-      character: (id: string) => `/character/${id}`,
-      location: (id: string) => `/location/${id}`,
-      episode: (id: string) => `/episode/${id}`,
+      character: (id: number) => `/character/${id}`,
+      location: (id: number) => `/location/${id}`,
+      episode: (id: number) => `/episode/${id}`,
     },
   },
 };
