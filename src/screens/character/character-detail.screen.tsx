@@ -1,5 +1,6 @@
 import { useCharacter } from '@/api/hooks/useCharacter';
 import EpisodeDetails from '@/components/episode-details/episode-details.component';
+import EpisodeList from '@/components/episode-list/episode-list.component';
 import Loader from '@/components/loader/loader.component';
 import LocationDetails from '@/components/location-details/location-details.component';
 import Status from '@/components/status/status.component';
@@ -64,8 +65,17 @@ const CharacterDetailScreen = ({
 
               {data.episode.length && (
                 <View>
-                  <Text>First seen in</Text>
+                  <Text variant="bodyLarge">First seen in</Text>
                   <EpisodeDetails episodeId={getIdFromUrl(data.episode[0])} />
+                </View>
+              )}
+
+              {data.episode.length && (
+                <View>
+                  <Text variant="bodyLarge">List of episodes</Text>
+                  {data.episode.map(episodeUrl => (
+                    <EpisodeList key={episodeUrl} episodeId={getIdFromUrl(episodeUrl)} />
+                  ))}
                 </View>
               )}
             </View>

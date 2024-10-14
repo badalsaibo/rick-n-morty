@@ -13,6 +13,8 @@ export const useEpisodes = () => {
     },
   });
 
+  console.log(data);
+
   return {
     data,
     isLoading,

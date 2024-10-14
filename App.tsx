@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import NavigatorRoot from '@/navigators/navigator.root';
 import { PaperProvider } from 'react-native-paper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import EpisodeListProvider from '@/providers/episode-list.provider';
 
 const queryClient = new QueryClient();
 
@@ -14,13 +15,15 @@ const App = () => {
   }, []);
 
   return (
-    <PaperProvider>
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <NavigatorRoot />
-        </NavigationContainer>
-      </QueryClientProvider>
-    </PaperProvider>
+    <EpisodeListProvider>
+      <PaperProvider>
+        <QueryClientProvider client={queryClient}>
+          <NavigationContainer>
+            <NavigatorRoot />
+          </NavigationContainer>
+        </QueryClientProvider>
+      </PaperProvider>
+    </EpisodeListProvider>
   );
 };
 
